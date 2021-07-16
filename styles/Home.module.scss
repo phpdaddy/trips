@@ -1,0 +1,205 @@
+.container {
+
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+
+
+  .leftNavBar {
+    display: flex;
+    flex-direction: column;
+    background: #F9F9FA;
+    height: 100vh;
+    width: 240px;
+    min-width: 240px;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 40px;
+
+    .logoContainer {
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .sections {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      .section {
+        display: flex;
+        font-size: 16px;
+        margin-bottom: 15px;
+
+        .sectionImage {
+          margin-right: 10px;
+          display: block;
+        }
+      }
+
+      .disabledSection {
+        color: #97999B;
+      }
+    }
+
+    .button {
+      background-color: #F8D964;
+      border-radius: 10px;
+      border: 0;
+      padding-left: 18px;
+      padding-top: 13px;
+      padding-bottom: 13px;
+      font-size: 14px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+
+      span {
+        margin-right: 35px;
+      }
+
+    }
+  }
+
+  .content {
+    padding-left: 40px;
+    padding-right: 40px;
+    width: 100%;
+    padding-top: 40px;
+
+    .title {
+      font-size: 24px;
+      font-weight: normal;
+      border-bottom: 1px solid #F1F1F2;
+      width: 100%;
+      padding-bottom: 25px;
+      margin-bottom: 32px;
+    }
+
+    .trip {
+      background: #F9F9FA;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      height: 88px;
+      padding-left: 20px;
+      padding-right: 20px;
+      justify-content: space-between;
+
+      @media screen and (max-width: 1024px) {
+        height: auto;
+        padding-top: 20px;
+        padding-bottom: 20px;
+      }
+
+      .tripDetails {
+        display: flex;
+        align-items: center;
+
+
+        .firstRow {
+          display: flex;
+          margin-bottom: 5px;
+
+          @media screen and (max-width: 1024px) {
+            flex-direction: column;
+          }
+
+          .country {
+            margin-right: 40px;
+          }
+
+          .date {
+            color: #97999B;
+
+          }
+        }
+
+        .secondRow {
+          display: flex;
+
+          @media screen and (max-width: 1024px) {
+            flex-direction: column;
+          }
+
+          .company {
+            margin-right: 40px;
+          }
+
+          .address {
+            color: #97999B;
+
+          }
+        }
+      }
+
+      .countryLogo {
+        margin-right: 20px;
+      }
+
+      .buttons {
+        min-width: 126px;
+        padding-left: 20px;
+
+        button {
+          width: 48px;
+          height: 48px;
+          border: 0;
+          cursor: pointer;
+        }
+
+        .removeBtn {
+          background: #FBEBE9;
+          border-radius: 10px;
+          margin-right: 10px;
+
+          > div {
+
+            top: 2px;
+          }
+        }
+
+        .okBtn {
+          background: #F1F1F2;
+          border-radius: 10px;
+          border: 0;
+
+          > div {
+
+            top: 2px;
+          }
+        }
+      }
+    }
+  }
+
+  .tipsAndTricks {
+    width: 320px;
+    min-width: 320px;
+    padding-top: 40px;
+    padding-left: 40px;
+    padding-right: 40px;
+    border-left: 1px solid #F1F1F2;
+
+    @media screen and (max-width: 1200px) {
+      display: none;
+    }
+
+
+    .title {
+      font-size: 24px;
+      font-weight: normal;
+      margin-bottom: 40px;
+    }
+
+    .text {
+      font-size: 12px;
+      color: #63666A;
+      white-space: pre-line;
+    }
+  }
+
+}
