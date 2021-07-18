@@ -5,6 +5,7 @@ import {Trip} from '../../../types'
 import LeftNavBar from '../../../components/LeftNavbar'
 import MobileHeader from '../../../components/MobileHeader'
 import Link from "next/link";
+import moment from "moment";
 
 const token = 'eGFBGlRBZB5ics8E2WzZ';
 
@@ -15,42 +16,57 @@ type Props = {
 
 export default function Id({trips, trip}: Props) {
 
-    const tripsList = trips.map((t, index) => <div className={styles.trip} key={index}>
-        <div className={styles.tripDetails}>
-            <div className={styles.countryContainer}>
-                <div className={styles.countryLogo}>
-                    <Image src="/austria.svg" alt="austria" width={22} height={22}/>
+    const tripsList = trips.map((t, index) => {
+        const startDate = moment(t.start_date, "DD.MM.YYYY").toDate();
 
+        return <div className={styles.trip} key={index}>
+            <div className={styles.tripDetails}>
+                <div className={styles.countryContainer}>
+                    <div className={styles.countryLogo}>
+                        <Image src="/austria.svg" alt="austria" width={22} height={22}/>
+
+                    </div>
+                    <div className={styles.country}>
+                        {t.address.country}
+                    </div>
                 </div>
-                <div className={styles.country}>
-                    {t.address.country}
+                <div>
+                    <span className={styles.sectionTitle}>Company</span>
+                    <div className={styles.company}>
+                        {t.company_name}
+                    </div>
+
+                    <div className={styles.address}>
+                        {t.address.street}
+                    </div>
+                    <span className={styles.sectionTitle}>Date</span>
+                    <div className={styles.date}>
+                        {t.start_date} - {t.end_date}
+                    </div>
                 </div>
             </div>
-            <div>
-                <span className={styles.sectionTitle}>Company</span>
-                <div className={styles.company}>
-                    {t.company_name}
-                </div>
+            <div className={styles.buttons}>
+                <Link href={`/trips/trip-edit/${t.id}`}>
 
-                <div className={styles.address}>
-                    {t.address.street}
-                </div>
-                <span className={styles.sectionTitle}>Date</span>
-                <div className={styles.date}>
-                    {t.start_date} - {t.end_date}
-                </div>
+                    <button className={styles.okBtn}>
+                        {(startDate <= new Date()) && <>View trip
+                            <Image src="/arrowRight.svg" alt="arrowRight" width={10} height={16}/>
+                        </>}
+                        {(startDate > new Date()) && <>
+                            Edit trip
+                            <Image src="/edit.svg" alt="edit" width={10} height={16}/></>
+                        }
+                    </button>
+
+
+                </Link>
             </div>
         </div>
-        <div className={styles.buttons}>
-            <Link href={`/trips/trip-edit/${t.id}`}>
-                <button className={styles.okBtn}>
-                    View trip
-                    <Image src="/arrowRight.svg" alt="arrowRight" width={10} height={16}/>
-                </button>
-            </Link>
-        </div>
-    </div>);
+    });
 
+
+    const startDate = moment(trip.start_date, "DD.MM.YYYY").toDate();
+    const disabled = startDate <= new Date();
 
     return (
         <div className={styles.container}>
@@ -68,7 +84,7 @@ export default function Id({trips, trip}: Props) {
                     <MobileHeader label="View trip"/>
                     <div className={styles.header}>
                         <h1 className={styles.title}>
-                            View trip
+                            {disabled ? 'View trip' : 'Edit trip'}
 
                         </h1>
                     </div>
@@ -77,7 +93,7 @@ export default function Id({trips, trip}: Props) {
                         <span>
                             Where do you want to go
                         </span>
-                        <input disabled={true} value={trip.address.country}/>
+                        <input disabled={disabled} value={trip.address.country}/>
 
                     </div>
 
@@ -85,12 +101,12 @@ export default function Id({trips, trip}: Props) {
                         <span>
                             Start date
                         </span>
-                        <input disabled={true} value={trip.start_date}/>
+                        <input disabled={disabled} value={trip.start_date}/>
 
                         <span>
                             End date
                         </span>
-                        <input disabled={true} value={trip.end_date}/>
+                        <input disabled={disabled} value={trip.end_date}/>
                     </div>
 
                     <div className={styles.formFragment}>
@@ -98,29 +114,29 @@ export default function Id({trips, trip}: Props) {
                             Company name
 
                         </span>
-                        <input disabled={true} value={trip.company_name}/>
+                        <input disabled={disabled} value={trip.company_name}/>
 
                         <span>
                             City
                         </span>
-                        <input disabled={true} value={trip.address.city}/>
+                        <input disabled={disabled} value={trip.address.city}/>
 
 
                         <span>
                             Street
                         </span>
-                        <input disabled={true} value={trip.address.street}/>
+                        <input disabled={disabled} value={trip.address.street}/>
 
                         <span>
                             Street number
                         </span>
-                        <input disabled={true} value={trip.address.street_num}/>
+                        <input disabled={disabled} value={trip.address.street_num}/>
 
                         <span>
                             Zip code
 
                         </span>
-                        <input disabled={true} value={trip.address.zip}/>
+                        <input disabled={disabled} value={trip.address.zip}/>
 
                     </div>
 
@@ -129,15 +145,20 @@ export default function Id({trips, trip}: Props) {
                         <span>
                             Have you been recently tested for COVID-19?
                         </span>
-                        <input disabled={true} value={trip.covid}/>
+                        <input disabled={disabled} value={trip.covid}/>
 
                         <span>
                             Date of receiving test results
                         </span>
-                        <input disabled={true} value={trip.covid_test_date}/>
+                        <input disabled={disabled} value={trip.covid_test_date}/>
 
 
                     </div>
+                    {!disabled &&
+                    <button className={styles.saveBtn}>
+                        Save  <Image src="/check.svg" alt="check" width={10} height={16}/>
+                    </button>
+                    }
                 </div>
                 <div className={styles.tripsList}>
                     <h1 className={styles.title}>

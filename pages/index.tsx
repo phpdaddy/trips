@@ -5,6 +5,7 @@ import {Trip} from '../types'
 import Link from 'next/link'
 import LeftNavBar from '../components/LeftNavbar'
 import MobileHeader from '../components/MobileHeader'
+import moment from "moment";
 
 const token = 'eGFBGlRBZB5ics8E2WzZ';
 
@@ -14,42 +15,51 @@ type Props = {
 
 export default function Home({trips}: Props) {
 
-    const tripsList = trips.map((t, index) => <div className={styles.trip} key={index}>
-        <div className={styles.tripDetails}>
-            <div className={styles.countryLogo}>
-                <Image src="/austria.svg" alt="austria" width={48} height={48}/>
-            </div>
-            <div>
-                <div className={styles.firstRow}>
-                    <div className={styles.country}>
-                        {t.address.country}
-                    </div>
-                    <div className={styles.date}>
-                        {t.start_date} - {t.end_date}
-                    </div>
+    const tripsList = trips.map((t, index) => {
+        const startDate = moment(t.start_date, "DD.MM.YYYY").toDate();
+        return <div className={styles.trip} key={index}>
+            <div className={styles.tripDetails}>
+                <div className={styles.countryLogo}>
+                    <Image src="/austria.svg" alt="austria" width={48} height={48}/>
                 </div>
-                <div className={styles.secondRow}>
-                    <div className={styles.company}>
-                        {t.company_name}
+                <div>
+                    <div className={styles.firstRow}>
+                        <div className={styles.country}>
+                            {t.address.country}
+                        </div>
+                        <div className={styles.date}>
+                            {t.start_date} - {t.end_date}
+                        </div>
                     </div>
+                    <div className={styles.secondRow}>
+                        <div className={styles.company}>
+                            {t.company_name}
+                        </div>
 
-                    <div className={styles.address}>
-                        {t.address.street}
+                        <div className={styles.address}>
+                            {t.address.street}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div className={styles.buttons}>
-            <button className={styles.removeBtn}>
-                <Image src="/remove.svg" alt="remove" width={10} height={16}/>
-            </button>
-            <Link href={`/trips/trip-edit/${t.id}`}>
-                <button className={styles.okBtn}>
-                    <Image src="/arrowRight.svg" alt="arrowRight" width={10} height={16}/>
+            <div className={styles.buttons}>
+                <button className={styles.removeBtn}>
+                    <Image src="/remove.svg" alt="remove" width={10} height={16}/>
                 </button>
-            </Link>
+                <Link href={`/trips/trip-edit/${t.id}`}>
+                    <button className={styles.okBtn}>
+                        {(startDate <= new Date()) &&
+                        <Image src="/arrowRight.svg" alt="arrowRight" width={10} height={16}/>
+                        }
+
+                        {(startDate > new Date()) &&
+                        <Image src="/edit.svg" alt="edit" width={10} height={16}/>
+                        }
+                    </button>
+                </Link>
+            </div>
         </div>
-    </div>);
+    });
 
     return (
         <div className={styles.container}>

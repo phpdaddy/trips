@@ -12,6 +12,9 @@
     padding-right: 40px;
     width: 100%;
     padding-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     @media screen and (max-width: 768px) {
       padding-left: 0;
@@ -20,17 +23,31 @@
 
     }
 
-    .title {
-      font-size: 24px;
-      font-weight: normal;
-      border-bottom: 1px solid #F1F1F2;
-      width: 100%;
-      padding-bottom: 25px;
-      margin-bottom: 32px;
+    .saveBtn {
+
+      background: #F8D964;
+      border-radius: 10px;
+      padding: 20px;
+      width: 200px;
+      display: flex;
+      justify-content: space-between;
+
+      margin-bottom: 50px;
+      cursor: pointer;
+      border: 0;
     }
 
     .header {
+      .title {
+        font-size: 24px;
+        font-weight: normal;
+        border-bottom: 1px solid #F1F1F2;
+        width: 100%;
+        padding-bottom: 25px;
+        margin-bottom: 32px;
+      }
 
+      width: 100%;
       @media screen and (max-width: 768px) {
         display: none;
       }
@@ -42,6 +59,8 @@
       border-radius: 10px;
       padding: 20px;
       margin-bottom: 23px;
+      width: 100%;
+      max-width: 500px;
 
       span {
         margin-bottom: 20px;
@@ -50,7 +69,6 @@
       }
 
       input {
-        background: #EDEDED;
         border: 1px solid #DDDDDF;
         box-sizing: border-box;
         border-radius: 10px;
@@ -60,6 +78,11 @@
         padding-right: 20px;
         width: 100%;
         margin-bottom: 20px;
+
+        &:disabled {
+
+          background: #EDEDED;
+        }
 
         &:last-child {
           margin-bottom: 0;

@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   background: #F9F9FA;
-  height: 100vh;
   width: 240px;
   min-width: 240px;
   padding-left: 40px;
@@ -43,10 +42,7 @@
     background-color: #F8D964;
     border-radius: 10px;
     border: 0;
-    padding-left: 20px;
-    padding-right: 15px;
-    padding-top: 13px;
-    padding-bottom: 13px;
+    padding: 13px 15px 13px 20px;
     font-size: 14px;
     margin-bottom: 20px;
     display: flex;
