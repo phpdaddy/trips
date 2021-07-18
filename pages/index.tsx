@@ -2,6 +2,9 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.scss'
 import {Trip} from '../types'
+import Link from 'next/link'
+import LeftNavBar from '../components/LeftNavbar'
+import MobileHeader from '../components/MobileHeader'
 
 const token = 'eGFBGlRBZB5ics8E2WzZ';
 
@@ -40,9 +43,11 @@ export default function Home({trips}: Props) {
             <button className={styles.removeBtn}>
                 <Image src="/remove.svg" alt="remove" width={10} height={16}/>
             </button>
-            <button className={styles.okBtn}>
-                <Image src="/arrowRight.svg" alt="arrowRight" width={10} height={16}/>
-            </button>
+            <Link href={`/trips/trip-edit/${t.id}`}>
+                <button className={styles.okBtn}>
+                    <Image src="/arrowRight.svg" alt="arrowRight" width={10} height={16}/>
+                </button>
+            </Link>
         </div>
     </div>);
 
@@ -56,42 +61,18 @@ export default function Home({trips}: Props) {
             </Head>
 
             <main className={styles.main}>
-                <div className={styles.leftNavBar}>
-                    <div className={styles.logoContainer}>
-                        <Image src="/logo.png" alt="logo" width={120} height={50}/>
-                    </div>
-                    <button className={styles.button}>
-                        <span>New Trip</span>
-
-                        <Image src="/newTrip.svg" alt="yourTrips" width={16} height={16}/>
-
-                    </button>
-
-                    <div className={styles.sections}>
-                        <div className={styles.section}>
-                            <div className={styles.sectionImage}><Image src="/yourTrips.svg" alt="yourTrips" width={16}
-                                                                        height={16}/></div>
-                            Your trips
-                        </div>
-                        <div className={`${styles.section} ${styles.disabledSection}`}>
-                            <div className={styles.sectionImage}><Image src="/futureFeature.svg" alt="futureFeature"
-                                                                        width={16} height={16}/></div>
-                            Future feature
-                        </div>
-                        <div className={`${styles.section} ${styles.disabledSection}`}>
-                            <div className={styles.sectionImage}><Image src="/futureSection.svg" alt="futureSection"
-                                                                        width={16} height={16}/></div>
-                            Future section
-                        </div>
-                    </div>
-
-                </div>
+                <LeftNavBar/>
                 <div className={styles.content}>
-                    <h1 className={styles.title}>
-                        Your trips
+                    <MobileHeader label="Your trips"/>
+                    <div className={styles.header}>
+                        <h1 className={styles.title}>
+                            Your trips
 
-                    </h1>
-                    {tripsList}
+                        </h1>
+                    </div>
+                    <div className={styles.tripsList}>
+                        {tripsList}
+                    </div>
                 </div>
                 <div className={styles.tipsAndTricks}>
                     <h1 className={styles.title}>

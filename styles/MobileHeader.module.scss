@@ -1,0 +1,32 @@
+.mobileHeader {
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid #F1F1F2;
+  margin-bottom: 25px;
+  height: 80px;
+  align-items: center;
+
+  .mobileTitle {
+    font-size: 14px;
+    font-weight: normal;
+  }
+
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
+
+  .hamburger {
+    background: #F9F9FA;
+    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    align-items: center;
+    border: 0;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  }
+}
