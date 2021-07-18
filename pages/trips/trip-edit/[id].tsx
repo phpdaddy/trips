@@ -6,6 +6,9 @@ import LeftNavBar from '../../../components/LeftNavbar'
 import MobileHeader from '../../../components/MobileHeader'
 import Link from "next/link";
 import moment from "moment";
+import {useEffect, useState} from "react";
+import cloneDeep from 'lodash.clonedeep';
+import {useRouter} from "next/router";
 
 const token = 'eGFBGlRBZB5ics8E2WzZ';
 
@@ -13,60 +16,86 @@ type Props = {
     trips: Trip[],
     trip: Trip
 }
+const createTripsList = (trips) => trips.map((t, index) => {
 
-export default function Id({trips, trip}: Props) {
+    const startDate = moment(t.start_date, "DD.MM.YYYY").toDate();
 
-    const tripsList = trips.map((t, index) => {
-        const startDate = moment(t.start_date, "DD.MM.YYYY").toDate();
+    return <div className={styles.trip} key={index}>
+        <div className={styles.tripDetails}>
+            <div className={styles.countryContainer}>
+                <div className={styles.countryLogo}>
+                    <Image src="/austria.svg" alt="austria" width={22} height={22}/>
 
-        return <div className={styles.trip} key={index}>
-            <div className={styles.tripDetails}>
-                <div className={styles.countryContainer}>
-                    <div className={styles.countryLogo}>
-                        <Image src="/austria.svg" alt="austria" width={22} height={22}/>
-
-                    </div>
-                    <div className={styles.country}>
-                        {t.address.country}
-                    </div>
                 </div>
-                <div>
-                    <span className={styles.sectionTitle}>Company</span>
-                    <div className={styles.company}>
-                        {t.company_name}
-                    </div>
-
-                    <div className={styles.address}>
-                        {t.address.street}
-                    </div>
-                    <span className={styles.sectionTitle}>Date</span>
-                    <div className={styles.date}>
-                        {t.start_date} - {t.end_date}
-                    </div>
+                <div className={styles.country}>
+                    {t.address.country}
                 </div>
             </div>
-            <div className={styles.buttons}>
-                <Link href={`/trips/trip-edit/${t.id}`}>
+            <div>
+                <span className={styles.sectionTitle}>Company</span>
+                <div className={styles.company}>
+                    {t.company_name}
+                </div>
 
-                    <button className={styles.okBtn}>
-                        {(startDate <= new Date()) && <>View trip
-                            <Image src="/arrowRight.svg" alt="arrowRight" width={10} height={16}/>
-                        </>}
-                        {(startDate > new Date()) && <>
-                            Edit trip
-                            <Image src="/edit.svg" alt="edit" width={10} height={16}/></>
-                        }
-                    </button>
-
-
-                </Link>
+                <div className={styles.address}>
+                    {t.address.street}
+                </div>
+                <span className={styles.sectionTitle}>Date</span>
+                <div className={styles.date}>
+                    {t.start_date} - {t.end_date}
+                </div>
             </div>
         </div>
-    });
+        <div className={styles.buttons}>
+            <Link href={`/trips/trip-edit/${t.id}`}>
 
+                <button className={styles.okBtn}>
+                    {(startDate <= new Date()) && <>
+                        View trip
+                        <Image src="/arrowRight.svg" alt="arrowRight" width={10} height={16}/>
+                    </>}
+                    {(startDate > new Date()) && <>
+                        Edit trip
+                        <Image src="/edit.svg" alt="edit" width={10} height={16}/></>
+                    }
+                </button>
+
+
+            </Link>
+        </div>
+    </div>
+});
+
+export default function Id({trips, trip, id}: Props) {
+    const [editedTrip, setEditedTrip] = useState(cloneDeep(trip));
+
+    useEffect(() => {
+        setEditedTrip(cloneDeep(trip));
+    }, [trip]);
+
+    const router = useRouter();
+
+    const refreshData = () => {
+        router.replace(router.asPath);
+    }
 
     const startDate = moment(trip.start_date, "DD.MM.YYYY").toDate();
     const disabled = startDate <= new Date();
+
+    const tripsList = createTripsList(trips);
+
+    const handleClick = async () => {
+        await fetch('https://task-devel.cleevio-vercel.vercel.app/api/trip/' + id, {
+            method: 'PUT',
+            headers: new Headers({
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }),
+
+            body: JSON.stringify(editedTrip),
+        })
+        refreshData();
+    }
 
     return (
         <div className={styles.container}>
@@ -93,7 +122,13 @@ export default function Id({trips, trip}: Props) {
                         <span>
                             Where do you want to go
                         </span>
-                        <input disabled={disabled} value={trip.address.country}/>
+                        <input disabled={disabled} value={editedTrip.address.country} onChange={(input) => {
+                            if (!editedTrip.address) {
+                                editedTrip.address = {};
+                            }
+                            editedTrip.address.country = input.target.value;
+                            setEditedTrip(cloneDeep(editedTrip));
+                        }}/>
 
                     </div>
 
@@ -101,12 +136,18 @@ export default function Id({trips, trip}: Props) {
                         <span>
                             Start date
                         </span>
-                        <input disabled={disabled} value={trip.start_date}/>
+                        <input disabled={disabled} value={editedTrip.start_date} onChange={(input) => {
+                            editedTrip.start_date = input.target.value;
+                            setEditedTrip(cloneDeep(editedTrip));
+                        }}/>
 
                         <span>
                             End date
                         </span>
-                        <input disabled={disabled} value={trip.end_date}/>
+                        <input disabled={disabled} value={editedTrip.end_date} onChange={(input) => {
+                            editedTrip.end_date = input.target.value;
+                            setEditedTrip(cloneDeep(editedTrip));
+                        }}/>
                     </div>
 
                     <div className={styles.formFragment}>
@@ -114,29 +155,56 @@ export default function Id({trips, trip}: Props) {
                             Company name
 
                         </span>
-                        <input disabled={disabled} value={trip.company_name}/>
+                        <input disabled={disabled} value={editedTrip.company_name} onChange={(input) => {
+                            editedTrip.company_name = input.target.value;
+                            setEditedTrip(cloneDeep(editedTrip));
+                        }}/>
 
                         <span>
                             City
                         </span>
-                        <input disabled={disabled} value={trip.address.city}/>
+                        <input disabled={disabled} value={editedTrip.address.city} onChange={(input) => {
+                            if (!editedTrip.address) {
+                                editedTrip.address = {};
+                            }
+                            editedTrip.address.city = input.target.value;
+                            setEditedTrip(cloneDeep(editedTrip));
+                        }}/>
 
 
                         <span>
                             Street
                         </span>
-                        <input disabled={disabled} value={trip.address.street}/>
+                        <input disabled={disabled} value={editedTrip.address.street} onChange={(input) => {
+                            if (!editedTrip.address) {
+                                editedTrip.address = {};
+                            }
+                            editedTrip.address.street = input.target.value;
+                            setEditedTrip(cloneDeep(editedTrip));
+                        }}/>
 
                         <span>
                             Street number
                         </span>
-                        <input disabled={disabled} value={trip.address.street_num}/>
+                        <input disabled={disabled} value={editedTrip.address.street_num} onChange={(input) => {
+                            if (!editedTrip.address) {
+                                editedTrip.address = {};
+                            }
+                            editedTrip.address.street_num = input.target.value;
+                            setEditedTrip(cloneDeep(editedTrip));
+                        }}/>
 
                         <span>
                             Zip code
 
                         </span>
-                        <input disabled={disabled} value={trip.address.zip}/>
+                        <input disabled={disabled} value={editedTrip.address.zip} onChange={(input) => {
+                            if (!editedTrip.address) {
+                                editedTrip.address = {};
+                            }
+                            editedTrip.address.zip = input.target.value;
+                            setEditedTrip(cloneDeep(editedTrip));
+                        }}/>
 
                     </div>
 
@@ -145,18 +213,24 @@ export default function Id({trips, trip}: Props) {
                         <span>
                             Have you been recently tested for COVID-19?
                         </span>
-                        <input disabled={disabled} value={trip.covid}/>
+                        <input disabled={disabled} value={editedTrip.covid} onChange={(input) => {
+                            editedTrip.covid = input.target.value === 'true';
+                            setEditedTrip(cloneDeep(editedTrip));
+                        }}/>
 
                         <span>
                             Date of receiving test results
                         </span>
-                        <input disabled={disabled} value={trip.covid_test_date}/>
+                        <input disabled={disabled} value={editedTrip.covid_test_date} onChange={(input) => {
+                            editedTrip.covid_test_date = input.target.value;
+                            setEditedTrip(cloneDeep(editedTrip));
+                        }}/>
 
 
                     </div>
                     {!disabled &&
-                    <button className={styles.saveBtn}>
-                        Save  <Image src="/check.svg" alt="check" width={10} height={16}/>
+                    <button className={styles.saveBtn} onClick={handleClick}>
+                        Save <Image src="/check.svg" alt="check" width={10} height={16}/>
                     </button>
                     }
                 </div>
@@ -193,6 +267,7 @@ export async function getStaticProps(context) {
         props: {
             trips,
             trip,
+            id: context.params.id
         },
     }
 }
