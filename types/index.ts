@@ -1,15 +1,15 @@
 export type Trip = {
-    id: string,
+    id: string | null,
     start_date: string,
     end_date: string,
     company_name: string,
     address: {
         country: string,
         zip: string,
-        street: string,
-        street_num: string,
-        city: string,
+        street: string | null,
+        street_num: string | null,
+        city: string | null,
     },
     covid: boolean,
-    covid_test_date: string,
+    covid_test_date: string | null,
 }

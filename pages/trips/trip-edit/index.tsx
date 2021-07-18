@@ -14,7 +14,6 @@ const token = 'eGFBGlRBZB5ics8E2WzZ';
 
 type Props = {
     trips: Trip[],
-    trip: Trip
 }
 const createTripsList = (trips) => trips.map((t, index) => {
 
@@ -66,12 +65,8 @@ const createTripsList = (trips) => trips.map((t, index) => {
     </div>
 });
 
-export default function Id({trips, trip, id}: Props) {
-    const [editedTrip, setEditedTrip] = useState(cloneDeep(trip));
-
-    useEffect(() => {
-        setEditedTrip(cloneDeep(trip));
-    }, [trip]);
+export default function Id({trips}: Props) {
+    const [editedTrip, setEditedTrip] = useState({} as Trip);
 
     const router = useRouter();
 
@@ -79,14 +74,11 @@ export default function Id({trips, trip, id}: Props) {
         router.replace(router.asPath);
     }
 
-    const startDate = moment(trip.start_date, "DD.MM.YYYY").toDate();
-    const disabled = startDate <= new Date();
-
     const tripsList = createTripsList(trips);
 
     const handleClick = async () => {
-        await fetch('https://task-devel.cleevio-vercel.vercel.app/api/trip/' + id, {
-            method: 'PUT',
+        await fetch('https://task-devel.cleevio-vercel.vercel.app/api/trip', {
+            method: 'POST',
             headers: new Headers({
                 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
@@ -113,7 +105,7 @@ export default function Id({trips, trip, id}: Props) {
                     <MobileHeader label="View trip"/>
                     <div className={styles.header}>
                         <h1 className={styles.title}>
-                            {disabled ? 'View trip' : 'Edit trip'}
+                            {'New trip'}
 
                         </h1>
                     </div>
@@ -122,7 +114,7 @@ export default function Id({trips, trip, id}: Props) {
                         <span>
                             Where do you want to go
                         </span>
-                        <input disabled={disabled} value={editedTrip.address?.country} onChange={(input) => {
+                        <input value={editedTrip.address?.country} onChange={(input) => {
                             if (!editedTrip.address) {
                                 editedTrip.address = {};
                             }
@@ -136,7 +128,7 @@ export default function Id({trips, trip, id}: Props) {
                         <span>
                             Start date
                         </span>
-                        <input disabled={disabled} value={editedTrip.start_date} onChange={(input) => {
+                        <input value={editedTrip.start_date} onChange={(input) => {
                             editedTrip.start_date = input.target.value;
                             setEditedTrip(cloneDeep(editedTrip));
                         }}/>
@@ -144,7 +136,7 @@ export default function Id({trips, trip, id}: Props) {
                         <span>
                             End date
                         </span>
-                        <input disabled={disabled} value={editedTrip.end_date} onChange={(input) => {
+                        <input value={editedTrip.end_date} onChange={(input) => {
                             editedTrip.end_date = input.target.value;
                             setEditedTrip(cloneDeep(editedTrip));
                         }}/>
@@ -155,7 +147,7 @@ export default function Id({trips, trip, id}: Props) {
                             Company name
 
                         </span>
-                        <input disabled={disabled} value={editedTrip.company_name} onChange={(input) => {
+                        <input value={editedTrip.company_name} onChange={(input) => {
                             editedTrip.company_name = input.target.value;
                             setEditedTrip(cloneDeep(editedTrip));
                         }}/>
@@ -163,7 +155,7 @@ export default function Id({trips, trip, id}: Props) {
                         <span>
                             City
                         </span>
-                        <input disabled={disabled} value={editedTrip.address?.city} onChange={(input) => {
+                        <input value={editedTrip.address?.city} onChange={(input) => {
                             if (!editedTrip.address) {
                                 editedTrip.address = {};
                             }
@@ -175,7 +167,7 @@ export default function Id({trips, trip, id}: Props) {
                         <span>
                             Street
                         </span>
-                        <input disabled={disabled} value={editedTrip.address?.street} onChange={(input) => {
+                        <input value={editedTrip.address?.street} onChange={(input) => {
                             if (!editedTrip.address) {
                                 editedTrip.address = {};
                             }
@@ -186,11 +178,16 @@ export default function Id({trips, trip, id}: Props) {
                         <span>
                             Street number
                         </span>
-                        <input disabled={disabled} value={editedTrip.address?.street_num} onChange={(input) => {
+                        <input value={editedTrip.address?.street_num} onChange={(input) => {
                             if (!editedTrip.address) {
                                 editedTrip.address = {};
                             }
-                            editedTrip.address.street_num = input.target.value;
+
+                            if (!input.target.value) {
+                                delete editedTrip.address.street_num
+                            } else {
+                                editedTrip.address.street_num = input.target.value
+                            }
                             setEditedTrip(cloneDeep(editedTrip));
                         }}/>
 
@@ -198,7 +195,7 @@ export default function Id({trips, trip, id}: Props) {
                             Zip code
 
                         </span>
-                        <input disabled={disabled} value={editedTrip.address?.zip} onChange={(input) => {
+                        <input value={editedTrip.address?.zip} onChange={(input) => {
                             if (!editedTrip.address) {
                                 editedTrip.address = {};
                             }
@@ -213,7 +210,7 @@ export default function Id({trips, trip, id}: Props) {
                         <span>
                             Have you been recently tested for COVID-19?
                         </span>
-                        <input disabled={disabled} value={editedTrip.covid} onChange={(input) => {
+                        <input value={editedTrip.covid} onChange={(input) => {
                             editedTrip.covid = input.target.value === 'true';
                             setEditedTrip(cloneDeep(editedTrip));
                         }}/>
@@ -221,18 +218,16 @@ export default function Id({trips, trip, id}: Props) {
                         <span>
                             Date of receiving test results
                         </span>
-                        <input disabled={disabled} value={editedTrip.covid_test_date} onChange={(input) => {
+                        <input value={editedTrip.covid_test_date} onChange={(input) => {
                             editedTrip.covid_test_date = input.target.value;
                             setEditedTrip(cloneDeep(editedTrip));
                         }}/>
 
 
                     </div>
-                    {!disabled &&
                     <button className={styles.saveBtn} onClick={handleClick}>
                         Save <Image src="/check.svg" alt="check" width={10} height={16}/>
                     </button>
-                    }
                 </div>
                 <div className={styles.tripsList}>
                     <h1 className={styles.title}>
@@ -256,37 +251,10 @@ export async function getStaticProps(context) {
     })
     const trips = await res1.json();
 
-    const res2 = await fetch('https://task-devel.cleevio-vercel.vercel.app/api/trip/' + context.params.id, {
-        headers: new Headers({
-            'Authorization': 'Bearer ' + token,
-        }),
-    })
-    const trip = await res2.json();
 
     return {
         props: {
             trips,
-            trip,
-            id: context.params.id
         },
-    }
-}
-
-export async function getStaticPaths() {
-    const res = await fetch('https://task-devel.cleevio-vercel.vercel.app/api/trip', {
-        headers: new Headers({
-            'Authorization': 'Bearer ' + token,
-        }),
-    })
-    const trips = await res.json()
-    const paths = trips.map(t => ({
-        params: {
-            id: t.id
-        }
-    }));
-
-    return {
-        paths,
-        fallback: false
     }
 }
