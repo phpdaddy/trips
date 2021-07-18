@@ -17,35 +17,34 @@ export default function Id({trips, trip}: Props) {
 
     const tripsList = trips.map((t, index) => <div className={styles.trip} key={index}>
         <div className={styles.tripDetails}>
-            <div className={styles.countryLogo}>
-                <Image src="/austria.svg" alt="austria" width={48} height={48}/>
+            <div className={styles.countryContainer}>
+                <div className={styles.countryLogo}>
+                    <Image src="/austria.svg" alt="austria" width={22} height={22}/>
+
+                </div>
+                <div className={styles.country}>
+                    {t.address.country}
+                </div>
             </div>
             <div>
-                <div className={styles.firstRow}>
-                    <div className={styles.country}>
-                        {t.address.country}
-                    </div>
-                    <div className={styles.date}>
-                        {t.start_date} - {t.end_date}
-                    </div>
+                <span className={styles.sectionTitle}>Company</span>
+                <div className={styles.company}>
+                    {t.company_name}
                 </div>
-                <div className={styles.secondRow}>
-                    <div className={styles.company}>
-                        {t.company_name}
-                    </div>
 
-                    <div className={styles.address}>
-                        {t.address.street}
-                    </div>
+                <div className={styles.address}>
+                    {t.address.street}
+                </div>
+                <span className={styles.sectionTitle}>Date</span>
+                <div className={styles.date}>
+                    {t.start_date} - {t.end_date}
                 </div>
             </div>
         </div>
         <div className={styles.buttons}>
-            <button className={styles.removeBtn}>
-                <Image src="/remove.svg" alt="remove" width={10} height={16}/>
-            </button>
-            <Link href="/trips/trip">
+            <Link href={`/trips/trip-edit/${t.id}`}>
                 <button className={styles.okBtn}>
+                    View trip
                     <Image src="/arrowRight.svg" alt="arrowRight" width={10} height={16}/>
                 </button>
             </Link>
@@ -93,8 +92,58 @@ export default function Id({trips, trip}: Props) {
                         </span>
                         <input disabled={true} value={trip.end_date}/>
                     </div>
+
+                    <div className={styles.formFragment}>
+                        <span>
+                            Company name
+
+                        </span>
+                        <input disabled={true} value={trip.company_name}/>
+
+                        <span>
+                            City
+                        </span>
+                        <input disabled={true} value={trip.address.city}/>
+
+
+                        <span>
+                            Street
+                        </span>
+                        <input disabled={true} value={trip.address.street}/>
+
+                        <span>
+                            Street number
+                        </span>
+                        <input disabled={true} value={trip.address.street_num}/>
+
+                        <span>
+                            Zip code
+
+                        </span>
+                        <input disabled={true} value={trip.address.zip}/>
+
+                    </div>
+
+
+                    <div className={styles.formFragment}>
+                        <span>
+                            Have you been recently tested for COVID-19?
+                        </span>
+                        <input disabled={true} value={trip.covid}/>
+
+                        <span>
+                            Date of receiving test results
+                        </span>
+                        <input disabled={true} value={trip.covid_test_date}/>
+
+
+                    </div>
                 </div>
                 <div className={styles.tripsList}>
+                    <h1 className={styles.title}>
+                        Trips
+
+                    </h1>
                     {tripsList}
                 </div>
 

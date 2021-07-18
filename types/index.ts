@@ -6,7 +6,10 @@ export type Trip = {
     address: {
         country: string,
         zip: string,
-        street: string
+        street: string,
+        street_num: string,
+        city: string,
     },
-    covid: boolean
+    covid: boolean,
+    covid_test_date: string,
 }

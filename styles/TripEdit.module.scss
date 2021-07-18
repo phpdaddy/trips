@@ -80,99 +80,69 @@
       display: none;
     }
 
+    .title {
+      font-size: 24px;
+      font-weight: normal;
+      width: 100%;
+      padding-bottom: 25px;
+      margin-bottom: 22px;
+    }
+
 
     .trip {
       background: #F9F9FA;
       border-radius: 10px;
-      display: flex;
-      align-items: center;
-      height: 88px;
-      padding-left: 20px;
-      padding-right: 20px;
-      justify-content: space-between;
-
-      @media screen and (max-width: 1024px) {
-        height: auto;
-        padding-top: 20px;
-        padding-bottom: 20px;
-      }
+      padding: 20px;
 
       .tripDetails {
-        display: flex;
-        align-items: center;
-
-
-        .firstRow {
+        .countryContainer {
           display: flex;
-          margin-bottom: 5px;
 
-          @media screen and (max-width: 1024px) {
-            flex-direction: column;
+          .countryLogo {
+            margin-right: 5px;
           }
 
           .country {
-            margin-right: 40px;
-          }
-
-          .date {
-            color: #97999B;
 
           }
         }
 
-        .secondRow {
-          display: flex;
+        .sectionTitle {
 
-          @media screen and (max-width: 1024px) {
-            flex-direction: column;
-          }
+          color: #63666A;
 
-          .company {
-            margin-right: 40px;
-          }
-
-          .address {
-            color: #97999B;
-
-          }
+          font-size: 12px;
+          margin-bottom: 5px;
+          margin-top: 10px;
+          display: block;
         }
-      }
 
-      .countryLogo {
-        margin-right: 20px;
+        .company {
+
+        }
+
+        .address {
+
+        }
+
+        .date {
+
+        }
       }
 
       .buttons {
-        min-width: 126px;
-        padding-left: 20px;
-
-        button {
-          width: 48px;
-          height: 48px;
-          border: 0;
-          cursor: pointer;
-        }
-
-        .removeBtn {
-          background: #FBEBE9;
-          border-radius: 10px;
-          margin-right: 10px;
-
-          > div {
-
-            top: 2px;
-          }
-        }
-
         .okBtn {
           background: #F1F1F2;
           border-radius: 10px;
           border: 0;
-
-          > div {
-
-            top: 2px;
-          }
+          display: flex;
+          color: #76787B;
+          font-size: 14px;
+          width: 100%;
+          justify-content: space-between;
+          margin-top: 20px;
+          padding: 15px 20px;
+          cursor: pointer;
         }
       }
     }
